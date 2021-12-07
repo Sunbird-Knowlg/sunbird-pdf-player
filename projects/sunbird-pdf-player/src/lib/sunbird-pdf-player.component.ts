@@ -30,11 +30,11 @@ export class SunbirdPdfPlayerComponent implements OnInit, OnDestroy, OnChanges, 
 
   @ViewChild('pdfPlayer', { static: true }) pdfPlayerRef: ElementRef;
   sideMenuConfig = {
-    showShare: true,
-    showDownload: true,
-    showReplay: true,
+    showShare: false,
+    showDownload: false,
+    showReplay: false,
     showExit: false,
-    showPrint: true
+    showPrint: false
   };
   @Input() playerConfig: PlayerConfig;
   @Input() action: string;
