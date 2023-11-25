@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@project-sunbird/sunbird-player-sdk-v9": "5.1.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.6.2"
   },
   "homepage": "https://github.com/Sunbird-Knowlg/sunbird-pdf-player/blob/release-5.5.0/README.md",
   "repository": {
