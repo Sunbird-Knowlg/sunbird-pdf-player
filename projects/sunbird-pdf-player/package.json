@@ -2,8 +2,8 @@
   "name": "@project-sunbird/sunbird-pdf-player-v9",
   "version": "5.6.0",
   "peerDependencies": {
-    "@angular/common": ">= 14.2.5",
-    "@angular/core": ">= 14.2.5",
+    "@angular/common": "15.2.10",
+    "@angular/core": "15.2.10",
     "@project-sunbird/client-services": ">= 3.4.8",
     "@project-sunbird/sb-styles": ">= 0.0.7"
   },
