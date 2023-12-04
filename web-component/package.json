@@ -1,12 +1,12 @@
 {
   "name": "@project-sunbird/sunbird-pdf-player-web-component",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The web component package for the sunbird pdf player",
   "main": "sunbird-pdf-player.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/Sunbird-Knowlg/sunbird-pdf-player/blob/release-5.5.0/README.md",
+  "homepage": "https://github.com/Sunbird-Knowlg/sunbird-pdf-player/blob/release-6.0.0/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/Sunbird-Knowlg/sunbird-pdf-player.git"

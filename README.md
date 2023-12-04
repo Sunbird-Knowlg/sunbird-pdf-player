@@ -1,3 +1,6 @@
+### Note: 
+This version of the angular library is compatilbe with angular version 15 and may not work with older versions of the angular 15 Apps.
+
 ## The PDF player for the Sunbird!
 
 The PDF player library is powered by Angular. This player is primarily designed to be used on Sunbird consumption platforms _(mobile app, web portal, offline desktop app)_ to drive reusability and maintainability, hence reducing the redundant development effort significantly, and it can be integrated with any platform irrespective of the platforms and the frontend frameworks. It is exported not only as an angular library but also as a web component. 
