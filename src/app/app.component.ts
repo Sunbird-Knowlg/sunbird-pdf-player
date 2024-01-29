@@ -21,21 +21,42 @@ export class AppComponent implements OnInit {
   };
   metadata: Metadata = {
     compatibilityLevel: 4,
-    artifactUrl: 'https://ntpproductionall.blob.core.windows.net/ntp-content-production/content/assets/do_31291455031832576019477/b301b302_std_1_tamilenglish_lang_term-1_opt.pdf',
+    artifactUrl: 'https://obj.stage.sunbirded.org/sunbird-content-staging/content/assets/do_212995436595576832124/java_tutorial.pdf',
     identifier: 'do_31291455031832576019477',
     name: 'B301,B302_STD_1_TAMIL,ENGLISH_LANG_TERM 1_OPT',
-    streamingUrl: 'https://ntpproductionall.blob.core.windows.net/ntp-content-production/content/assets/do_31291458881611366418883/b331332333_std_5_mathssciencesocial_tm_term-1_opt.pdf',
+    streamingUrl: 'https://obj.stage.sunbirded.org/sunbird-content-staging/content/assets/do_212995436595576832124/java_tutorial.pdf',
     pkgVersion: 1
   };
   pdfMetadataEvents: object;
   pdfPlayerConfig: PlayerConfig = {
-    context: {
-      channel: '505c7c48ac6dc1edc9b08f21db5a571d',
-      pdata: { id: 'prod.diksha.portal', ver: '3.2.12', pid: 'sunbird-portal' },
+    context: 
+    {
       dispatcher: {
         dispatch(event) {
           console.log(`Events from dispatcher: ${JSON.stringify(event)}`);
         }
+      },
+      "mode": "play",
+      "pdata": {
+        "id": "dev.sunbird.portal",
+        "ver": "5.2.0",
+        "pid": "sunbird-portal"
+      },
+      "sid": "6d1898db-d783-4f83-8b92-4a36636e0d2f",
+      "uid": "anonymous",
+      "timeDiff": -0.089,
+      "channel": "01269878797503692810",
+      "tags": [
+        "01269878797503692810"
+      ],
+      "did": "3ca74a4c5fbce6b7b7f5cd12cebb1682",
+      "contextRollup": {
+        "l1": "01269878797503692810"
+      },
+      "objectRollup": {},
+      "userData": {
+        "firstName": "Guest",
+        "lastName": ""
       }
     },
     config: this.config,

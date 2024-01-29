@@ -42,13 +42,15 @@
       const pdfElement = document.createElement('sunbird-pdf-player');
       pdfElement.setAttribute('player-config', JSON.stringify(playerConfig));
 
+      pdfElement.addEventListener('telemetryEvent', (event) => {
+        console.log("On telemetryEvent", event);
+      });
+      
       pdfElement.addEventListener('playerEvent', (event) => {
         console.log("On playerEvent", event);
       });
 
-      pdfElement.addEventListener('telemetryEvent', (event) => {
-        console.log("On telemetryEvent", event);
-      });
+      
 
       const myPlayer = document.getElementById("my-player");
       myPlayer.appendChild(pdfElement);
