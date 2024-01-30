@@ -14,7 +14,7 @@ jobs:
           environment:
             NG_CLI_ANALYTICS: "ci"
           command: npm install --legacy-peer-deps
-      - run: cd projects/sunbird-pdf-player && sudo npm install && npx audit-ci@^6 --config ./audit-ci.jsonc
+      - run: cd projects/sunbird-pdf-player && npm install && npx audit-ci@^6 --config ./audit-ci.jsonc
       - run:
           name: Linting
           command: npm run lint
