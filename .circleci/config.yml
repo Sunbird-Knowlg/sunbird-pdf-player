@@ -16,9 +16,6 @@ jobs:
           command: npm install --legacy-peer-deps
       - run: cd projects/sunbird-pdf-player && sudo npm install && npx audit-ci@^6 --config ./audit-ci.jsonc
       - run:
-          name: Node install
-          command: sudo npm install
-      - run:
           name: Linting
           command: npm run lint
       - run:
