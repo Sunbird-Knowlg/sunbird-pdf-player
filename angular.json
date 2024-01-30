@@ -149,10 +149,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "main": "projects/sunbird-pdf-player/src/test.ts",
             "tsConfig": "projects/sunbird-pdf-player/tsconfig.spec.json",
             "karmaConfig": "projects/sunbird-pdf-player/karma.conf.js"
           }
