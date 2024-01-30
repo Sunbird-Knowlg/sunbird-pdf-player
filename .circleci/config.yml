@@ -12,7 +12,7 @@ jobs:
           command: echo ${CIRCLE_BRANCH}
       - run:
           name: add chromium
-          command: npm i puppeteer
+          command: npm i puppeteer  --legacy-peer-deps
       - run:
           environment:
             NG_CLI_ANALYTICS: "ci"
