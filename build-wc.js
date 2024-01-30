@@ -5,6 +5,7 @@ const build = async () => {
   const files = [
     "./dist/pdf-player-wc/runtime.js",
     "./dist/pdf-player-wc/polyfills.js",
+    "./dist/pdf-player-wc/scripts.js",
     "./dist/pdf-player-wc/vendor.js",
     "./dist/pdf-player-wc/main.js"
   ];
