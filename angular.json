@@ -198,7 +198,8 @@
               "./node_modules/@project-sunbird/sb-styles/assets/_styles.scss"
             ],
             "scripts": [
-              "node_modules/@project-sunbird/telemetry-sdk/index.js"
+              "node_modules/@project-sunbird/telemetry-sdk/index.js",
+              "node_modules/reflect-metadata/Reflect.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
