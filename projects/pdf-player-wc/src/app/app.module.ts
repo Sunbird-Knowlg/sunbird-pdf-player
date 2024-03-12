@@ -10,8 +10,7 @@ import { SunbirdPdfPlayerComponent } from '../../../sunbird-pdf-player/src/lib/s
 
 @NgModule({
     declarations: [
-        SunbirdPdfPlayerComponent,
-        PdfViewerComponent
+     
     ],
     imports: [
         BrowserModule,

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SunbirdPdfPlayerComponent } from './sunbird-pdf-player.component';
 import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
-import { SunbirdPlayerSdkModule  } from '@project-sunbird/sunbird-player-sdk-v9';
+import { PLAYER_CONFIG, SunbirdPlayerSdkModule  } from '@project-sunbird/sunbird-player-sdk-v9';
 
 @NgModule({
   declarations: [
@@ -14,6 +14,7 @@ import { SunbirdPlayerSdkModule  } from '@project-sunbird/sunbird-player-sdk-v9'
     FormsModule,
     SunbirdPlayerSdkModule
   ],
+  providers: [{provide: PLAYER_CONFIG, useValue: {contentCompatibilityLevel: 5}}],
   exports: [SunbirdPdfPlayerComponent]
 })
 export class SunbirdPdfPlayerModule { }
