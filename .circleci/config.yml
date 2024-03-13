@@ -21,10 +21,10 @@ jobs:
           command: echo ${CIRCLE_BRANCH}
       - run:
           name: Install dependecies and audit for critical 
-          command: cd projects/sunbird-pdf-player &&  npm install --no-progress --legacy-peer-deps && npx audit-ci@^6 --config ./audit-ci.jsonc
+          command: cd projects/sunbird-pdf-player &&  npm install --no-progress --force && npx audit-ci@^6 --config ./audit-ci.jsonc
       - run:
           name: ng lint
-          command: cd ~/sunbird-pdf-player && npm install --no-progress --legacy-peer-deps  && npm run lint
+          command: cd ~/sunbird-pdf-player && npm install --no-progress --force  && npm run lint
       - run:
           name: Testing
           command: npm run test
