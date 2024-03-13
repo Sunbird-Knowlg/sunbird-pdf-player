@@ -4,22 +4,20 @@ import { DoBootstrap, Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { SunbirdPlayerSdkModule } from '@project-sunbird/sunbird-player-sdk-v9';
-import { PdfViewerComponent } from '../../../sunbird-pdf-player/src/lib/pdf-viewer/pdf-viewer.component';
-import { SunbirdPdfPlayerComponent } from '../../../sunbird-pdf-player/src/lib/sunbird-pdf-player.component';
+import { PLAYER_CONFIG, SunbirdPlayerSdkModule } from '@project-sunbird/sunbird-player-sdk-v9';
+import { SunbirdPdfPlayerComponent } from '@project-sunbird/sunbird-pdf-player-v9';
 
 @NgModule({
-    declarations: [
-     
-    ],
-    imports: [
-        BrowserModule,
-        CommonModule,
-        FormsModule,
-        HttpClientModule,
-        SunbirdPlayerSdkModule
-    ],
-    providers: []
+  declarations: [
+  ],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    SunbirdPlayerSdkModule
+  ],
+  providers: [{ provide: PLAYER_CONFIG, useValue: { contentCompatibilityLevel: 5 } }],
 })
 export class AppModule implements DoBootstrap {
   constructor(private injector: Injector) { }
