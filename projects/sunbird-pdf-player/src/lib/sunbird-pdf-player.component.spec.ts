@@ -254,7 +254,6 @@ describe('SunbirdPdfPlayerComponent', () => {
     expect(component.viewerActions.emit).toHaveBeenCalledWith({type: changes.action});
   });
   it('should call resetValidPage', () => {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
     spyOn(component['cdRef'], 'detectChanges');
     component.resetValidPage();
     expect(component.validPage).toBeTruthy();
