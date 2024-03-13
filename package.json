@@ -42,7 +42,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
-    "zone.js": "~0.13.3"
+    "zone.js": "~0.13.3",
+    "ally.js": "1.4.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "16.2.12",
