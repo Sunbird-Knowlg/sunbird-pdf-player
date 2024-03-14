@@ -1,2 +1,3 @@
 **/node_modules
 .eslintrc.json
+**/projects/pdf-player-wc/.eslintrc.json
