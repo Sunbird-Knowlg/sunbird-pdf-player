@@ -79,5 +79,11 @@
     "typescript": "5.3.3",
     "watch": "^1.0.2",
     "wrench": "^1.5.9"
+  },
+  "optionalDependencies": {
+    "@nx/nx-darwin-arm64": "16.5.1",
+    "@nx/nx-darwin-x64": "16.5.1",
+    "@nx/nx-linux-x64-gnu": "16.5.1",
+    "@nx/nx-win32-x64-msvc": "16.5.1"
   }
 }
