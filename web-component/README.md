@@ -51,6 +51,7 @@ Follow below-mentioned steps to use it in plain javascript project:
 - Refer demo [example](https://github.com/Sunbird-Knowlg/sunbird-pdf-player/blob/release-5.5.0/web-component-demo/index.html)
 
 - To run the demo project, use the following commands:
+
 	```bash
   cd web-component-demo
 	npx http-server --cors .
