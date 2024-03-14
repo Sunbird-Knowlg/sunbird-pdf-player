@@ -24,7 +24,7 @@ jobs:
           command: cd projects/sunbird-pdf-player &&  npm install --no-progress --force && npx audit-ci@^6 --config ./audit-ci.jsonc && rm -rf node_modules
       - run:
           name: ng lint
-          command: cd ~/sunbird-pdf-player && npm install --no-progress --legacy-peer-deps  && npm run lint
+          command: cd ~/sunbird-pdf-player && npm install --no-progress --legacy-peer-deps --include=optional  && npm run lint
       - run:
           name: Testing
           command: npm run test
