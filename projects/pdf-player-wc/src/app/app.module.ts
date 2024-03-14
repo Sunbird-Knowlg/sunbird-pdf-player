@@ -5,7 +5,7 @@ import { createCustomElement } from '@angular/elements';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { PLAYER_CONFIG, SunbirdPlayerSdkModule } from '@project-sunbird/sunbird-player-sdk-v9';
-import { SunbirdPdfPlayerComponent } from '@project-sunbird/sunbird-pdf-player-v9';
+import { SunbirdPdfPlayerComponent, SunbirdPdfPlayerModule } from '@project-sunbird/sunbird-pdf-player-v9';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { SunbirdPdfPlayerComponent } from '@project-sunbird/sunbird-pdf-player-v
     CommonModule,
     FormsModule,
     HttpClientModule,
-    SunbirdPlayerSdkModule
+    SunbirdPlayerSdkModule,
+    SunbirdPdfPlayerModule
   ],
   providers: [{ provide: PLAYER_CONFIG, useValue: { contentCompatibilityLevel: 5 } }],
 })

@@ -81,18 +81,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sunbird-pdf-player-app:build"
+            "buildTarget": "sunbird-pdf-player-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sunbird-pdf-player-app:build:production"
+              "buildTarget": "sunbird-pdf-player-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sunbird-pdf-player-app:build"
+            "buildTarget": "sunbird-pdf-player-app:build"
           }
         },
         "test": {
@@ -242,18 +242,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pdf-player-wc:build"
+            "buildTarget": "pdf-player-wc:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pdf-player-wc:build:production"
+              "buildTarget": "pdf-player-wc:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pdf-player-wc:build"
+            "buildTarget": "pdf-player-wc:build"
           }
         },
         "test": {
