@@ -20,6 +20,7 @@ import { ErrorService, errorCode, errorMessage } from '@project-sunbird/sunbird-
   styleUrls: ['./sunbird-pdf-player.component.scss']
 })
 export class SunbirdPdfPlayerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+  @Input() resourceService: any;
   public pdfConfig: Config;
   private subscription;
   public viewState = 'start';

@@ -13,7 +13,8 @@
         [actions]="viewerActions"></pdf-viewer>
     </span>
     <sb-player-sidebar *ngIf="viewState ==='player'" [title]="viewerService.contentName"
-      (sidebarEvent)="sideBarEvents($event)" [config]="sideMenuConfig"></sb-player-sidebar>
+      (sidebarEvent)="sideBarEvents($event)" [config]="sideMenuConfig"       
+      [resourceService]="resourceService"></sb-player-sidebar>
 
     <div class="sb-pdf-reading-status" *ngIf="viewState ==='player'">Page {{viewerService.currentPagePointer}} of
       {{viewerService.totalNumberOfPages}} <span></span>
@@ -27,9 +28,10 @@
         </div>
       </div>
     </div>
-    <sb-player-end-page [contentName]="viewerService.contentName"  [outcomeLabel]="'Pages read:'" [outcome]="viewerService.currentPagePointer"
+    <sb-player-end-page [contentName]="viewerService.contentName"  [outcomeLabel]="resourceService?.frmelmnts?.lbl?.pagesRead" [outcome]="viewerService.currentPagePointer"
       [userName]="viewerService.userName" [nextContent]="nextContent" [timeSpentLabel]="viewerService.timeSpent"
-      (replayContent)="replayContent($event)" (exitContent)="exitContent($event)" (playNextContent)="playContent($event)" [showExit]="sideMenuConfig.showExit" *ngIf="viewState === 'end'"></sb-player-end-page>
+      (replayContent)="replayContent($event)" (exitContent)="exitContent($event)" (playNextContent)="playContent($event)" [showExit]="sideMenuConfig.showExit" *ngIf="viewState === 'end'"
+      [resourceService]="resourceService"></sb-player-end-page>
      <sb-player-contenterror *ngIf="showContentError"></sb-player-contenterror>
 </div>
 
