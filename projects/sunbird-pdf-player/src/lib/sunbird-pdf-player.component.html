@@ -1,6 +1,6 @@
 <div class="sunbird-pdf-palyer-container" #pdfPlayer>
   <sb-player-start-page *ngIf="viewState === 'start'" [title]="viewerService.contentName"
-    [progress]="viewerService.loadingProgress"></sb-player-start-page>
+    [progress]="viewerService.loadingProgress" [playerConfig]="playerConfig"></sb-player-start-page>
 
   <sb-player-header class="sb-pdf-main-header notVisible" [ngClass]="{'isVisible': showControls}"
     *ngIf="viewState ==='player'" [pageNumber]="viewerService.currentPagePointer" [config]="headerConfig"
@@ -13,9 +13,10 @@
         [actions]="viewerActions"></pdf-viewer>
     </span>
     <sb-player-sidebar *ngIf="viewState ==='player'" [title]="viewerService.contentName"
-      (sidebarEvent)="sideBarEvents($event)" [config]="sideMenuConfig"></sb-player-sidebar>
+      (sidebarEvent)="sideBarEvents($event)" [config]="sideMenuConfig"       
+      [playerConfig]="playerConfig"></sb-player-sidebar>
 
-    <div class="sb-pdf-reading-status" *ngIf="viewState ==='player'">Page {{viewerService.currentPagePointer}} of
+    <div class="sb-pdf-reading-status" *ngIf="viewState ==='player'">{{playerConfig?.context?.resourceBundles?.page || "Page"}} {{viewerService.currentPagePointer}} {{playerConfig?.context?.resourceBundles?.of || "of"}}
       {{viewerService.totalNumberOfPages}} <span></span>
       {{((viewerService.currentPagePointer/viewerService.totalNumberOfPages) * 100).toFixed(0)}}%</div>
     <div class="visible-only-potrait BtmNotVisible" [ngClass]="{'isVisible': showControls}"
@@ -27,9 +28,10 @@
         </div>
       </div>
     </div>
-    <sb-player-end-page [contentName]="viewerService.contentName"  [outcomeLabel]="'Pages read:'" [outcome]="viewerService.currentPagePointer"
+    <sb-player-end-page [contentName]="viewerService.contentName"  [outcomeLabel]="playerConfig?.context?.resourceBundles?.pagesRead || 'Pages read:'" [outcome]="viewerService.currentPagePointer"
       [userName]="viewerService.userName" [nextContent]="nextContent" [timeSpentLabel]="viewerService.timeSpent"
-      (replayContent)="replayContent($event)" (exitContent)="exitContent($event)" (playNextContent)="playContent($event)" [showExit]="sideMenuConfig.showExit" *ngIf="viewState === 'end'"></sb-player-end-page>
+      (replayContent)="replayContent($event)" (exitContent)="exitContent($event)" (playNextContent)="playContent($event)" [showExit]="sideMenuConfig.showExit" *ngIf="viewState === 'end'"
+      [playerConfig]="playerConfig"></sb-player-end-page>
      <sb-player-contenterror *ngIf="showContentError"></sb-player-contenterror>
 </div>
 
