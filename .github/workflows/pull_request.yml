@@ -45,7 +45,7 @@ jobs:
         run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
       - name: Install sonar scanner
-        run: 'sudo npm install -i -g sonarqube-scanner'
+        run: 'npm install -i -g sonarqube-scanner'
         
       - name: Sonar scanner
-        run: cd ~/sunbird-pdf-player && sonar-scanner
+        run: sonar-scanner
