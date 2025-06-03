@@ -397,3 +397,24 @@ For existing apps, follow these steps [steps](https://github.com/Sunbird-Knowlg/
 Click to see the sample code - [sampleCode](https://github.com/Sunbird-Ed/SunbirdEd-mobile-app/blob/release-4.8.0/src/app/player/player.page.html)
 <br /><br />
 
+## Code Quality
+
+The project maintains code quality through automated checks that run on every pull request:
+
+1. **Linting**
+   - ESLint for code style and quality
+   - Command: `npm run lint`
+
+2. **Dependencies**
+   - Uses `npm ci --legacy-peer-deps` for deterministic installations
+   - GitHub Actions cache for faster builds
+
+3. **Code Formatting**
+   - Ensures consistent code formatting
+   - Can be automatically fixed using `npm run lint:fix`
+
+4. **Testing**
+   - Unit tests using Karma
+   - Command: `npm run test`
+
+These checks ensure consistent code style, secure dependency management, and reliable testing.
