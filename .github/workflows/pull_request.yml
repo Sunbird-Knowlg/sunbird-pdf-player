@@ -1,8 +1,8 @@
 name: Code Quality Checks
 
 on:
-  pull_request:
-    branches:
+  push:
+    tags:
       - '**'
 
 jobs:
@@ -43,3 +43,9 @@ jobs:
 
       - name: Run test
         run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+      - name: Install sonar scanner
+        run: 'sudo npm install -i -g sonarqube-scanner'
+        
+      - name: Sonar scanner
+        run: cd ~/sunbird-pdf-player && sonar-scanner
