@@ -418,3 +418,25 @@ The project maintains code quality through automated checks that run on every pu
    - Command: `npm run test`
 
 These checks ensure consistent code style, secure dependency management, and reliable testing.
+
+## Release Process
+
+Release Process for Sunbird PDF Player - This GitHub Actions workflow automatically publishes the Sunbird PDF Player web component to NPM whenever a new tag is pushed. The following steps describe the workflow file:
+
+- Checks out the repository code
+- Sets up Node.js
+- Manages dependency caching to speed up builds
+- Installs dependencies
+- Builds the web component
+- Packages and publishes it to NPM
+- Prerequisites - set the `NPM_TOKEN` in the repository secrets
+
+1. **Web Component Publishing:**:
+   - Builds the web component using `npm run build-web-component`
+   - Packages it with specific version from package.json
+   - Publishes to NPM as @project-sunbird/sunbird-pdf-player-web-component
+
+2. **Module Publishing:**
+   - Builds the main module using `npm run build-lib`
+   - Packages it with specific version from package.json
+   - Publishes to NPM as @project-sunbird/sunbird-pdf-player
