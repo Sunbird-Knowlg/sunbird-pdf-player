@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 import { ErrorService, errorCode, errorMessage } from '@project-sunbird/sunbird-player-sdk-v9';
 
 @Component({
+  standalone: false,
   selector: 'sunbird-pdf-player',
   templateUrl: './sunbird-pdf-player.component.html',
   styleUrls: ['./sunbird-pdf-player.component.scss']

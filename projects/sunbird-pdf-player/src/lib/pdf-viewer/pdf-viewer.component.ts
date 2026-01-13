@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { ViewerService } from '../services/viewer.service';
 @Component({
+  standalone: false,
   selector: 'pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss']
