@@ -14,6 +14,7 @@ import { SunbirdPdfPlayerService } from './sunbird-pdf-player.service';
 import * as _ from 'lodash';
 import { ErrorService, errorCode, errorMessage } from '@project-sunbird/sunbird-player-sdk-v9';
 
+// eslint-disable-next-line @angular-eslint/prefer-standalone
 @Component({
   standalone: false,
   selector: 'sunbird-pdf-player',
