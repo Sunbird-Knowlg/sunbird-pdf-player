@@ -62,5 +62,5 @@ function addStyleToAngularJson(
     assets.unshift(SB_STYLE_ASSETS);
   }
 
-  return updateWorkspace(workspace);
+  return updateWorkspace(workspace) as unknown as Rule;
 }

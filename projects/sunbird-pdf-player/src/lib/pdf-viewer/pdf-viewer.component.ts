@@ -4,7 +4,9 @@ import {
   Output, Input, HostListener
 } from '@angular/core';
 import { ViewerService } from '../services/viewer.service';
+// eslint-disable-next-line @angular-eslint/prefer-standalone
 @Component({
+  standalone: false,
   selector: 'pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss']
