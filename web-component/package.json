@@ -1,5 +1,5 @@
 {
-  "name": "@jeraldj/sunbird-pdf-player-web-component",
+  "name": "@project-sunbird/sunbird-pdf-player-web-component",
   "version": "8.2.0",
   "description": "The web component package for the sunbird pdf player",
   "main": "sunbird-pdf-player.js",
