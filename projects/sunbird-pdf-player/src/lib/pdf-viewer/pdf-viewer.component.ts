@@ -13,7 +13,7 @@ import { ViewerService } from '../services/viewer.service';
 })
 export class PdfViewerComponent implements AfterViewInit {
 
-  public src = 'assets/pdfjs/web/viewer.html?file=';
+  public src = 'assets/pdf-player/pdfjs/web/viewer.html?file=';
   @ViewChild('iframe', { static: true }) iframeRef: ElementRef;
   @Input() pdfURL: string;
   @Input() actions = new EventEmitter<any>();
@@ -97,23 +97,23 @@ export class PdfViewerComponent implements AfterViewInit {
 
 
   registerForEvents() {
-      this.viewerApp.eventBus.on('pagesloaded', (data) => {
-        setTimeout(() => {
-          this.viewerApp.rotatePages(this.viewerService.rotation);
-          this.ListenToPageScroll();
-        }, 500);
-        this.pagesLoadedCallback(data);
-        if (this.viewerApp?.page && this.viewerService.currentPagePointer) {
-          this.viewerApp.page = this.viewerService.currentPagePointer;
-        }
-      });
-      this.viewerApp.eventBus.on('pagechanging', (data) => {
-        this.viewerEvent.emit({ type: 'pagechanging', data });
-      });
+    this.viewerApp.eventBus.on('pagesloaded', (data) => {
+      setTimeout(() => {
+        this.viewerApp.rotatePages(this.viewerService.rotation);
+        this.ListenToPageScroll();
+      }, 500);
+      this.pagesLoadedCallback(data);
+      if (this.viewerApp?.page && this.viewerService.currentPagePointer) {
+        this.viewerApp.page = this.viewerService.currentPagePointer;
+      }
+    });
+    this.viewerApp.eventBus.on('pagechanging', (data) => {
+      this.viewerEvent.emit({ type: 'pagechanging', data });
+    });
 
-      this.viewerApp.eventBus.on('rotatecw', () => {
-        this.viewerEvent.emit({ type: 'rotatecw', data: this.viewerApp.pdfViewer.pagesRotation });
-      });
+    this.viewerApp.eventBus.on('rotatecw', () => {
+      this.viewerEvent.emit({ type: 'rotatecw', data: this.viewerApp.pdfViewer.pagesRotation });
+    });
 
   }
 
@@ -124,7 +124,7 @@ export class PdfViewerComponent implements AfterViewInit {
   }
 
   private ListenToPageScroll() {
-    const viewerContainer =  this.iframeRef.nativeElement.contentDocument.getElementById('viewerContainer');
+    const viewerContainer = this.iframeRef.nativeElement.contentDocument.getElementById('viewerContainer');
     if (viewerContainer) {
       viewerContainer.onscroll = (e: any) => {
         if (Math.ceil(e.target.offsetHeight + e.target.scrollTop) >= e.target.scrollHeight && this.viewerService.totalNumberOfPages > 1) {
