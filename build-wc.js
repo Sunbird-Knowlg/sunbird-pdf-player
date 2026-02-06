@@ -35,33 +35,6 @@ const build = async () => {
     await fs.writeJson(packageJsonSource, packageJsonContent, { spaces: 2 });
     console.log("✅ package.json restored to web-component/");
   }
-  // else {
-  //   // Create default package.json if it didn't exist
-  //   const defaultPackageJson = {
-  //     "name": "@project-sunbird/sunbird-pdf-player-web-component",
-  //     "version": "1.6.0",
-  //     "description": "The web component package for the sunbird pdf player",
-  //     "main": "assets/pdf-player/sunbird-pdf-player.js",
-  //     "scripts": {
-  //       "test": "echo \"Error: no test specified\" && exit 1"
-  //     },
-  //     "homepage": "https://github.com/Sunbird-Knowlg/sunbird-pdf-player/blob/release-5.5.0/README.md",
-  //     "repository": {
-  //       "type": "git",
-  //       "url": "https://github.com/Sunbird-Knowlg/sunbird-pdf-player.git"
-  //     },
-  //     "keywords": [
-  //       "sunbird",
-  //       "pdf",
-  //       "player",
-  //       "web-component"
-  //     ],
-  //     "author": "sunbird",
-  //     "license": "MIT"
-  //   };
-  //   await fs.writeJson(packageJsonSource, defaultPackageJson, { spaces: 2 });
-  //   console.log("✅ package.json created in web-component/");
-  // }
 
   // Also copy to demo folder with same structure
   const demoDir = "web-component-demo/assets/pdf-player";
