@@ -8,7 +8,7 @@ describe('PdfViewerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PdfViewerComponent]
+      imports: [PdfViewerComponent]
     })
       .compileComponents();
   }));

@@ -5,6 +5,7 @@ import { ViewerService } from './services/viewer.service';
 import { SunbirdPdfPlayerService } from './sunbird-pdf-player.service';
 import { mockData } from '../lib/services/viewer.service.spec.data';
 import { SimpleChanges, SimpleChange } from '@angular/core';
+import { PLAYER_CONFIG } from '@project-sunbird/sunbird-player-sdk-v9';
 
 describe('SunbirdPdfPlayerComponent', () => {
   let component: SunbirdPdfPlayerComponent;
@@ -12,9 +13,13 @@ describe('SunbirdPdfPlayerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SunbirdPdfPlayerComponent],
+      imports: [SunbirdPdfPlayerComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [ViewerService, SunbirdPdfPlayerService]
+      providers: [
+        ViewerService, 
+        SunbirdPdfPlayerService,
+        { provide: PLAYER_CONFIG, useValue: { contentCompatibilityLevel: 5 } }
+      ]
     })
       .compileComponents();
   }));
