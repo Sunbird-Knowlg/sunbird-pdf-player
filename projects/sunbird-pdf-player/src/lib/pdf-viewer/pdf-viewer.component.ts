@@ -4,12 +4,15 @@ import {
   Output, Input, HostListener
 } from '@angular/core';
 import { ViewerService } from '../services/viewer.service';
-// eslint-disable-next-line @angular-eslint/prefer-standalone
+
+import { CommonModule } from '@angular/common';
+
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
-  styleUrls: ['./pdf-viewer.component.scss']
+  styleUrls: ['./pdf-viewer.component.scss'],
+  imports: [CommonModule]
 })
 export class PdfViewerComponent implements AfterViewInit {
 

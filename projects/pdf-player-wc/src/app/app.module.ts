@@ -9,16 +9,15 @@ import { PdfViewerComponent } from '../../../sunbird-pdf-player/src/lib/pdf-view
 import { SunbirdPdfPlayerComponent } from '../../../sunbird-pdf-player/src/lib/sunbird-pdf-player.component';
 
 @NgModule({
-    declarations: [
-        SunbirdPdfPlayerComponent,
-        PdfViewerComponent
-    ],
+    declarations: [],
     imports: [
       BrowserModule,
       CommonModule,
       FormsModule,
       HttpClientModule,
-      SunbirdPlayerSdkModule
+      SunbirdPlayerSdkModule,
+      SunbirdPdfPlayerComponent,
+      PdfViewerComponent
     ],
     providers: [
       { provide: PLAYER_CONFIG, useValue: { contentCompatibilityLevel: 5 } }
