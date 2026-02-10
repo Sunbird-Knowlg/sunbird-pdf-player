@@ -150,15 +150,15 @@ export class SunbirdPdfPlayerService {
     return ({
       object: this.telemetryObject,
       context: {
-        channel: this.context.channel || "in.sunbird",
-        pdata: this.context.pdata || {'id':'in.sunbird', 'ver':'1.0'},
+        channel: this.context?.channel || "in.sunbird",
+        pdata: this.context?.pdata || {'id':'in.sunbird', 'ver':'1.0'},
         env: 'contentplayer',
-        sid: this.context.sid,
-        uid: this.context.uid,
+        sid: this.context?.sid,
+        uid: this.context?.uid,
         cdata: [{ id: this.contentSessionId, type: 'ContentSession' },
         { id: this.playSessionId, type: 'PlaySession' },
         {id: '2.0' , type: 'PlayerVersion'}],
-        rollup: this.context.contextRollup || {}
+        rollup: this.context?.contextRollup || {}
       }
     });
   }
