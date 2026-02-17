@@ -62,8 +62,8 @@ export class PdfViewer extends LitElement {
     try {
       const loadingTask = pdfjsLib.getDocument(this.src);
       loadingTask.onProgress = (progress) => {
-        const percent = (progress.loaded / progress.total) * 100;
-        this.dispatchEvent(new CustomEvent('viewerEvent', { detail: { type: 'progress', data: Math.round(percent) } }));
+        const percent = Math.round((progress.loaded / progress.total) * 100);
+        this.dispatchEvent(new CustomEvent('viewerEvent', { detail: { type: 'progress', data: percent } }));
       };
       this._pdf = await loadingTask.promise;
       this._pagesCount = this._pdf.numPages;

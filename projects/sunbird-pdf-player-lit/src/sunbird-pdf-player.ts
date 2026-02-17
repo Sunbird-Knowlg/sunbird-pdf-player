@@ -82,7 +82,7 @@ export class SunbirdPdfPlayer extends LitElement {
         this.pagesVisited.add(data.pageNumber);
         telemetryService.impression(this.currentPagePointer);
         telemetryService.heartbeat({ type: 'PAGE_CHANGE', currentPage: this.currentPagePointer });
-        this._emitPlayerEvent({ type: 'PAGE_CHANGE', data });
+        this.dispatchEvent(new CustomEvent('playerEvent', { detail: { type: 'PAGE_CHANGE', data } }));
         break;
       case 'pageend':
         this._showEndPage();
@@ -131,7 +131,7 @@ export class SunbirdPdfPlayer extends LitElement {
         this._initialize();
         break;
       case 'EXIT':
-        this._emitPlayerEvent({ type: 'EXIT' });
+        this.dispatchEvent(new CustomEvent('playerEvent', { detail: { type: 'EXIT' } }));
         break;
     }
   }
@@ -139,7 +139,7 @@ export class SunbirdPdfPlayer extends LitElement {
   private _raiseStartEvent() {
     const duration = Date.now() - this.startTime;
     telemetryService.start(duration);
-    this._emitPlayerEvent({ type: 'START', data: { duration } });
+    this.dispatchEvent(new CustomEvent('playerEvent', { detail: { type: 'START', data: { duration } } }));
   }
 
   private _showEndPage() {
@@ -155,17 +155,13 @@ export class SunbirdPdfPlayer extends LitElement {
       true
     );
     this.isEndEventRaised = true;
-    this._emitPlayerEvent({ type: 'END', data: { duration } });
-  }
-
-  private _emitPlayerEvent(event: any) {
-    this.dispatchEvent(new CustomEvent('playerEvent', { detail: event }));
+    this.dispatchEvent(new CustomEvent('playerEvent', { detail: { type: 'END', data: { duration } } }));
   }
 
   private _downloadPdf() {
     if (this.playerConfig?.metadata.artifactUrl) {
       window.open(this.playerConfig.metadata.artifactUrl, '_blank');
-      this._emitPlayerEvent({ type: 'DOWNLOAD' });
+      this.dispatchEvent(new CustomEvent('playerEvent', { detail: { type: 'DOWNLOAD' } }));
     }
   }
 

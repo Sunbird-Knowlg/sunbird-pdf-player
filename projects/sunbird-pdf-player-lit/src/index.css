@@ -1,15 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --player-primary: #2563eb;
-  --player-bg: #f3f4f6;
-}
-
-:host {
-  display: block;
-  width: 100%;
-  height: 100%;
-  font-family: inherit;
-}
+@tailwind base; @tailwind components; @tailwind utilities;
+:root { --player-primary: #2563eb; --player-bg: #f3f4f6; }
+:host { display: block; width: 100%; height: 100%; font-family: inherit; }
