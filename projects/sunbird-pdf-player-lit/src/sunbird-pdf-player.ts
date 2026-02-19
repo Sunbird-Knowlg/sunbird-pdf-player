@@ -1,7 +1,7 @@
 
-import { LitElement, html, css, PropertyValues } from 'lit';
+import { LitElement, html, PropertyValues } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { PlayerConfig } from './interfaces';
+import type { PlayerConfig } from './interfaces';
 import { telemetryService } from './services/telemetry-service';
 import './components/pdf-viewer';
 import './components/start-page';
@@ -13,8 +13,7 @@ import { PdfViewer } from './components/pdf-viewer';
 
 @customElement('sunbird-pdf-player')
 export class SunbirdPdfPlayer extends LitElement {
-  @property({ type: String, attribute: 'player-config' }) playerConfigAttr = '';
-  @state() playerConfig?: PlayerConfig;
+  @property({ type: Object, attribute: 'player-config' }) playerConfig?: PlayerConfig;
 
   @state() viewState: 'start' | 'player' | 'end' | 'error' = 'start';
   @state() loadingProgress = 0;
@@ -36,15 +35,8 @@ export class SunbirdPdfPlayer extends LitElement {
   }
 
   protected updated(changedProperties: PropertyValues) {
-    if (changedProperties.has('playerConfigAttr') && this.playerConfigAttr) {
-      try {
-        this.playerConfig = JSON.parse(this.playerConfigAttr);
-        this._initialize();
-      } catch (e) {
-        console.error('Invalid player-config', e);
-        this.viewState = 'error';
-        this.errorMessage = 'Invalid player-config';
-      }
+    if (changedProperties.has('playerConfig') && this.playerConfig) {
+      this._initialize();
     }
   }
 
@@ -196,22 +188,24 @@ export class SunbirdPdfPlayer extends LitElement {
             .totalPages=${this.totalNumberOfPages}
             @actions=${this._handleHeaderActions}>
           </sb-player-header>
+        ` : ''}
 
-          <div class="flex-grow relative overflow-hidden">
-            <pdf-viewer
-              .src=${this.playerConfig?.metadata.artifactUrl || ''}
-              .zoom=${this.zoom}
-              .rotation=${this.rotation}
-              .initialPage=${this.currentPagePointer}
-              @viewerEvent=${this._handleViewerEvent}>
-            </pdf-viewer>
+        <div class="flex-grow relative overflow-hidden ${this.viewState === 'player' ? '' : 'hidden'}">
+          <pdf-viewer
+            .src=${this.playerConfig?.metadata.artifactUrl || ''}
+            .zoom=${this.zoom}
+            .rotation=${this.rotation}
+            .initialPage=${this.currentPagePointer}
+            @viewerEvent=${this._handleViewerEvent}>
+          </pdf-viewer>
 
-            <sb-player-navigation
-                class="transition-opacity duration-300 ${this.showControls ? 'opacity-100' : 'opacity-0'}"
-                @actions=${this._handleHeaderActions}>
-            </sb-player-navigation>
-          </div>
+          <sb-player-navigation
+              class="transition-opacity duration-300 ${this.showControls ? 'opacity-100' : 'opacity-0'}"
+              @actions=${this._handleHeaderActions}>
+          </sb-player-navigation>
+        </div>
 
+        ${this.viewState === 'player' ? html`
           <div class="bg-gray-800 text-white text-xs py-1 px-4 flex justify-between">
             <span>${this.playerConfig?.metadata.name}</span>
             <span>Page ${this.currentPagePointer} of ${this.totalNumberOfPages}</span>

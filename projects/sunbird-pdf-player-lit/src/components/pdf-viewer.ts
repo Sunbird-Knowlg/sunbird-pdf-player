@@ -61,7 +61,7 @@ export class PdfViewer extends LitElement {
     this.dispatchEvent(new CustomEvent('viewerEvent', { detail: { type: 'progress', data: 10 } }));
     try {
       const loadingTask = pdfjsLib.getDocument(this.src);
-      loadingTask.onProgress = (progress) => {
+      loadingTask.onProgress = (progress: { loaded: number; total: number }) => {
         const percent = Math.round((progress.loaded / progress.total) * 100);
         this.dispatchEvent(new CustomEvent('viewerEvent', { detail: { type: 'progress', data: percent } }));
       };
@@ -73,7 +73,7 @@ export class PdfViewer extends LitElement {
       await this._renderAllPages();
 
       if (this.initialPage > 1) {
-          this.navigateToPage(this.initialPage);
+        this.navigateToPage(this.initialPage);
       }
     } catch (error) {
       this.dispatchEvent(new CustomEvent('viewerEvent', {
