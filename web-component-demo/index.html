@@ -1,59 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunbird PDF Player — Demo</title>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunbird PDF player</title>
-    <link rel="stylesheet" href="./styles.css">
-    <style>
-      .player-grid {
-        height: 90vh;
-        ;
-        width: 90%;
-        margin: 0 auto;
-        display: grid;
-        gap: 1.5rem;
-        padding-top: 4rem;
+  <!--
+    CSS from the Lit component build.
+    When embedding in a portal, import this stylesheet in the portal's head,
+    or inline it into the portal's global stylesheet.
+  -->
+  <link rel="stylesheet" href="../projects/sunbird-pdf-player-lit/dist/style.css">
 
-        @media screen and (max-width:768px) {
-          grid-template-columns: 100%;
-          gap: 0px;
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f0f0f0;
+    }
+
+    header {
+      padding: 12px 20px;
+      background: #1e293b;
+      color: #f1f5f9;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    #player-container {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    sunbird-pdf-player {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Custom theme example ───────────────────────────────────────────────
+       Override any token here to change the player's look without touching
+       the component source code. The same technique works inside a portal
+       or mobile WebView by injecting CSS variables.
+    ─────────────────────────────────────────────────────────────────────── */
+    /*
+    sunbird-pdf-player {
+      --pdf-primary:     #7c3aed;
+      --pdf-primary-hover: #6d28d9;
+      --pdf-header-bg:   #1e1e2e;
+      --pdf-header-text: #cdd6f4;
+    }
+    */
+  </style>
+</head>
+
+<body>
+  <header>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    Sunbird PDF Player Demo
+    <span style="margin-left:auto;opacity:.6;font-size:12px;">
+      Open browser console to see player &amp; telemetry events
+    </span>
+  </header>
+
+  <div id="player-container">
+    <sunbird-pdf-player id="pdf-player"></sunbird-pdf-player>
+  </div>
+
+  <!--
+    Load the Lit web component bundle.
+    In a production portal you'd reference the versioned file from a CDN.
+  -->
+  <script type="module" src="../projects/sunbird-pdf-player-lit/dist/sunbird-pdf-player.js"></script>
+
+  <script>
+    /**
+     * Sample playerConfig — mirrors the format used by the Angular version
+     * so existing consumers can migrate without changing their config.
+     */
+    const playerConfig = {
+      context: {
+        mode: 'play',
+        sid: '7283cf2e-d215-9944-b0c5-269489c6fa56',
+        did: '3c0a3724311fe944dec5df559cc4e006',
+        uid: 'anonymous',
+        channel: '505c7c48ac6dc1edc9b08f21db5a571d',
+        pdata: { id: 'sunbird.portal', ver: '3.2.12', pid: 'sunbird-portal.contentplayer' },
+        contextRollup: { l1: '505c7c48ac6dc1edc9b08f21db5a571d' },
+        userData: { firstName: 'Guest', lastName: '' }
+      },
+      config: {
+        toolBar: {
+          showZoomButtons:   true,
+          showPagesButton:   true,
+          showPagingButtons: true,
+          showRotateButton:  true
+        },
+        sideMenu: {
+          showShare:    true,
+          showDownload: true,
+          showReplay:   true,
+          showExit:     false,
+          showPrint:    true
         }
+      },
+      metadata: {
+        identifier: 'do_31291455031832576019477',
+        name: 'Sample PDF — Bhagavad Gita',
+        artifactUrl: 'https://www.w3.org/WAI/WCAG21/Techniques/pdf/sample.pdf'
       }
-    </style>
+    };
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-      crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect.min.js"
-      integrity="sha512-jvbPH2TH5BSZumEfOJZn9IV+5bSwwN+qG4dvthYe3KCGC3/9HmxZ4phADbt9Pfcp+XSyyfc2vGZ/RMsSUZ9tbQ=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    window.addEventListener('load', () => {
+      const player = document.getElementById('pdf-player');
 
-  </head>
+      // Set config via JS property (works for objects)
+      player.playerConfig = playerConfig;
 
-  <body>
-    <div class="player-grid" id="my-player">
-    </div>
-    <script type="text/javascript" src="sunbird-pdf-player.js"></script>
-    <script type="text/javascript">
-      const playerConfig = {"context":{"mode":"play","partner":[],"pdata":{"id":"dev.sunbird.portal","ver":"5.2.0","pid":"sunbird-portal"},"contentId":"do_21374910251798528014586","sid":"6d1898db-d783-4f83-8b92-4a36636e0d2f","uid":"anonymous","timeDiff":-0.089,"channel":"01269878797503692810","tags":["01269878797503692810"],"did":"3ca74a4c5fbce6b7b7f5cd12cebb1682","contextRollup":{"l1":"01269878797503692810"},"objectRollup":{},"userData":{"firstName":"Guest","lastName":""}},"config":{"showEndPage":false,"endPage":[{"template":"assessment","contentType":["SelfAssess"]}],"showStartPage":true,"host":"","overlay":{"showUser":false},"splash":{"text":"","icon":"","bgImage":"assets/icons/splacebackground_1.png","webLink":""},"apislug":"/action","repos":["/sunbird-plugins/renderer"],"plugins":[{"id":"org.sunbird.iframeEvent","ver":1,"type":"plugin"},{"id":"org.sunbird.player.endpage","ver":1.1,"type":"plugin"}],"sideMenu":{"showShare":true,"showDownload":true,"showExit":false}},"metadata":{"copyright":"2009","subject":["Environmental Studies"],"channel":"01345815127107174426","language":["English"],"mimeType":"application/pdf","objectType":"Content","gradeLevel":["Class 3"],"appIcon":"","primaryCategory":"eTextbook","artifactUrl":"https://obj.stage.sunbirded.org/sunbird-content-staging/content/do_21374910251798528014586/artifact/cbse-sample-paper-for-class-1-.pdf","contentType":"eTextBook","identifier":"do_21374910251798528014586","audience":["Student"],"visibility":"Default","author":"Aparna-sri","mediaType":"content","osId":"org.ekstep.quiz.app","languageCode":["en"],"license":"CC BY 4.0","name":"pdf-pdf-pdf-pdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-p","status":"Live","code":"0534f774-b873-d46d-a46b-bde6a68985dc","interceptionPoints":{},"streamingUrl":"https://obj.stage.sunbirded.org/sunbird-content-staging/content/do_21374910251798528014586/artifact/cbse-sample-paper-for-class-1-.pdf","medium":["English"],"createdOn":"2023-03-13T13:16:54.093+0000","lastUpdatedOn":"2023-03-13T13:17:03.060+0000","originData":{"identifier":"do_21374910251798528014586","repository":"https://dockstaging.sunbirded.org/api/content/v1/read/do_21374910251798528014586"},"creator":"Aparna-sri","pkgVersion":1,"versionKey":"1678713416428","framework":"ekstep_ncert_k-12","createdBy":"703f836a-353b-43f4-83fb-b440e7ee9302","orgDetails":{"email":null,"orgName":"Globe"},"licenseDetails":{"name":"CC BY 4.0","url":"https://creativecommons.org/licenses/by/4.0/legalcode","description":"For details see below:"}},"data":{}};
-      const pdfElement = document.createElement('sunbird-pdf-player');
-      pdfElement.setAttribute('player-config', JSON.stringify(playerConfig));
+      // OR set via attribute (JSON string):
+      // player.setAttribute('player-config', JSON.stringify(playerConfig));
 
-      pdfElement.addEventListener('playerEvent', (event) => {
-        console.log("On playerEvent", event);
+      // ── Listen for output events ────────────────────────────────────────
+      player.addEventListener('playerEvent', (e) => {
+        console.log('%c[playerEvent]', 'color:#1a73e8;font-weight:bold', e.detail);
       });
 
-      pdfElement.addEventListener('telemetryEvent', (event) => {
-        console.log("On telemetryEvent", event);
+      player.addEventListener('telemetryEvent', (e) => {
+        console.log('%c[telemetryEvent]', 'color:#16a34a;font-weight:bold', e.detail);
       });
 
-      const myPlayer = document.getElementById("my-player");
-      myPlayer.appendChild(pdfElement);
-
-    </script>
-  </body>
-
+      // ── External action example ──────────────────────────────────────────
+      // You can trigger actions programmatically:
+      // player.action = 'NEXT';
+      // player.action = 'ZOOM_IN';
+      // player.action = 'REPLAY';
+    });
+  </script>
+</body>
 </html>

@@ -1,8 +1,83 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+
+/**
+ * Loading / splash screen displayed while the PDF is being fetched.
+ */
 @customElement('sb-player-start-page')
 export class StartPage extends LitElement {
-  @property({ type: String }) title = ''; @property({ type: Number }) progress = 0;
+  @property({ type: String }) title = '';
+  @property({ type: Number }) progress = 0;
+
   createRenderRoot() { return this; }
-  render() { return html`<div class=\"flex flex-col items-center justify-center h-full bg-gray-100 p-8 text-center\"><div class=\"mb-8\"><div class=\"w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center text-white mb-4 mx-auto\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"w-12 h-12\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z\" /></svg></div><h1 class=\"text-2xl font-bold text-gray-800\">${this.title}</h1></div><div class=\"w-64 bg-gray-300 rounded-full h-2.5 mb-4\"><div class=\"bg-blue-600 h-2.5 rounded-full\" style=\"width: ${this.progress}%\"></div></div><p class=\"text-gray-600\">Loading ${this.progress}%</p></div>`; }
+
+  render() {
+    return html`
+      <div
+        class="flex flex-col items-center justify-center h-full p-8 text-center"
+        style="background:var(--pdf-page-bg);"
+        role="status"
+        aria-label="Loading PDF: ${this.progress}%"
+        aria-live="polite"
+      >
+        <!-- Document icon with spinner ring -->
+        <div class="relative mb-6">
+          <div
+            class="w-20 h-20 rounded-full flex items-center justify-center"
+            style="background:var(--pdf-primary);"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              width="36" height="36" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <!-- Spinner ring -->
+          <svg
+            class="pdf-spinner absolute -inset-1 w-[88px] h-[88px]"
+            viewBox="0 0 88 88"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="44" cy="44" r="40" stroke="var(--pdf-primary)" stroke-width="3"
+              stroke-dasharray="251" stroke-dashoffset="${251 - (251 * this.progress) / 100}"
+              stroke-linecap="round"
+              style="transition:stroke-dashoffset 0.3s ease;"
+            />
+          </svg>
+        </div>
+
+        <h1
+          class="text-lg font-semibold mb-1 max-w-xs truncate"
+          style="color:var(--pdf-header-text);"
+          title=${this.title}
+        >
+          ${this.title || 'Loading PDF…'}
+        </h1>
+
+        <!-- Progress bar -->
+        <div
+          class="mt-4 w-56 rounded-full overflow-hidden"
+          style="height:6px;background:var(--pdf-header-border);"
+          role="progressbar"
+          aria-valuenow=${this.progress}
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div
+            class="h-full rounded-full transition-all duration-300"
+            style="width:${this.progress}%;background:var(--pdf-primary);"
+          ></div>
+        </div>
+
+        <p class="mt-2 text-xs" style="color:var(--pdf-header-icon);">
+          ${this.progress > 0 ? `${this.progress}%` : 'Please wait…'}
+        </p>
+      </div>
+    `;
+  }
 }
