@@ -1,4 +1,10 @@
-name: Publish sunbird-pdf-player-web-component
+name: Publish web-component demo artefacts
+
+# This workflow publishes the built web-component demo files as a GitHub
+# Release asset whenever a tag is pushed, so consumers can reference a
+# specific versioned bundle directly without installing from NPM.
+#
+# The NPM package itself is published by publish_module.yml.
 
 on:
   push:
@@ -6,8 +12,12 @@ on:
       - '*'
 
 jobs:
-  publish-npm:
+  release-assets:
+    name: Attach dist to GitHub Release
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # needed to create/upload release assets
 
     steps:
       - name: Checkout code
@@ -16,31 +26,32 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.15.0'
+          node-version: '22.x'
 
-      - name: Restore node_modules cache
+      - name: Cache node_modules
         id: cache
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
-    
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-    
-      - name: Save node_modules cache
-        if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            ${{ runner.os }}-node-
 
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Pack dist as zip
         run: |
-          npm run build-web-component && npm pack ./web-component
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          npm publish project-sunbird-sunbird-pdf-player-web-component-* --access public
+          cd dist
+          zip -r ../sunbird-pdf-player-${{ github.ref_name }}.zip .
+          cd ..
+
+      - name: Create / update GitHub Release and upload asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sunbird-pdf-player-${{ github.ref_name }}.zip
+          generate_release_notes: true
