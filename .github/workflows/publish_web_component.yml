@@ -1,23 +1,22 @@
-name: Publish web-component demo artefacts
+name: Publish web component
 
-# This workflow publishes the built web-component demo files as a GitHub
-# Release asset whenever a tag is pushed, so consumers can reference a
-# specific versioned bundle directly without installing from NPM.
-#
-# The NPM package itself is published by publish_module.yml.
+# Triggered on any tag push (e.g. v1.2.3 or 1.2.3).
+# Builds the Lit web component, publishes it to NPM, then attaches
+# the dist bundle as a zip to the GitHub Release so consumers can
+# also reference a CDN/direct-download URL without installing from NPM.
 
 on:
   push:
     tags:
       - '*'
 
-jobs:
-  release-assets:
-    name: Attach dist to GitHub Release
-    runs-on: ubuntu-latest
+permissions:
+  contents: write   # required to create/upload GitHub Release assets
 
-    permissions:
-      contents: write   # needed to create/upload release assets
+jobs:
+  publish:
+    name: Build → NPM publish → GitHub Release
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -27,6 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Cache node_modules
         id: cache
@@ -41,16 +41,29 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Type-check
+        run: npx tsc --noEmit
+
       - name: Build
         run: npm run build
 
-      - name: Pack dist as zip
+      - name: Set package version from tag
+        # Strips the leading 'v' so both v1.2.3 and 1.2.3 tags work
         run: |
-          cd dist
-          zip -r ../sunbird-pdf-player-${{ github.ref_name }}.zip .
-          cd ..
+          VERSION="${GITHUB_REF_NAME#v}"
+          npm version "$VERSION" --no-git-tag-version
+          echo "Publishing version: $VERSION"
 
-      - name: Create / update GitHub Release and upload asset
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+
+      - name: Zip dist for release asset
+        run: |
+          zip -r sunbird-pdf-player-${{ github.ref_name }}.zip dist/
+
+      - name: Create GitHub Release and attach bundle
         uses: softprops/action-gh-release@v2
         with:
           files: sunbird-pdf-player-${{ github.ref_name }}.zip
