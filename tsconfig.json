@@ -1,29 +1,29 @@
 {
-  "compileOnSave": false,
-  "angularCompilerOptions": {
-    "enableIvy": true
-  },
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": true,
-    "module": "es2015",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2020",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "target": "ESNext",
+    "useDefineForClassFields": false,
+    "module": "ESNext",
     "lib": [
-      "es2018",
-      "dom"
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
     ],
-    "paths": {
-      "@project-sunbird/sunbird-pdf-player-v9/*": [
-        "dist/sunbird-pdf-player/*"
-      ]
-    }
-  }
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "types": ["vite/client"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src"
+  ]
 }

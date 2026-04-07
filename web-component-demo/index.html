@@ -1,59 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunbird PDF Player — Demo</title>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunbird PDF player</title>
-    <link rel="stylesheet" href="./styles.css">
-    <style>
-      .player-grid {
-        height: 90vh;
-        ;
-        width: 90%;
-        margin: 0 auto;
-        display: grid;
-        gap: 1.5rem;
-        padding-top: 4rem;
+  <!--
+    Stylesheet produced by the build (Tailwind utilities + CSS custom properties).
+    In a production portal, import this once in the portal's global stylesheet.
+  -->
+  <link rel="stylesheet" href="../dist/assets/style.css">
 
-        @media screen and (max-width:768px) {
-          grid-template-columns: 100%;
-          gap: 0px;
-        }
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: 1fr 320px;
+      grid-template-areas:
+        "topbar topbar"
+        "player sidebar";
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────────────────── */
+    .topbar {
+      grid-area: topbar;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      font-size: 14px;
+    }
+    .topbar svg { flex-shrink: 0; }
+    .topbar .title { font-weight: 600; }
+    .topbar .hint {
+      margin-left: auto;
+      font-size: 12px;
+      color: #64748b;
+    }
+    .topbar .pdf-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 16px;
+    }
+    .topbar label { font-size: 12px; color: #94a3b8; }
+    .topbar select, .topbar input {
+      font-size: 12px;
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 3px 6px;
+    }
+    .topbar button {
+      font-size: 12px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .topbar button:hover { background: #1557b0; }
+
+    /* ── Player area ─────────────────────────────────────────────────────── */
+    #player-container {
+      grid-area: player;
+      overflow: hidden;
+    }
+    sunbird-pdf-player {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Event log panel ─────────────────────────────────────────────────── */
+    .event-panel {
+      grid-area: sidebar;
+      display: flex;
+      flex-direction: column;
+      background: #1e293b;
+      border-left: 1px solid #334155;
+      overflow: hidden;
+    }
+    .event-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #0f172a;
+      font-size: 12px;
+      font-weight: 600;
+      border-bottom: 1px solid #334155;
+      flex-shrink: 0;
+    }
+    .event-panel-header button {
+      font-size: 11px;
+      background: #334155;
+      color: #94a3b8;
+      border: none;
+      border-radius: 3px;
+      padding: 2px 8px;
+      cursor: pointer;
+    }
+    #event-log {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      font-size: 11px;
+      font-family: 'Menlo', 'Consolas', monospace;
+      line-height: 1.5;
+    }
+    #event-log::-webkit-scrollbar { width: 5px; }
+    #event-log::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    .log-entry {
+      padding: 6px 8px;
+      margin-bottom: 6px;
+      border-radius: 4px;
+      border-left: 3px solid transparent;
+      word-break: break-all;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; } }
+    .log-player  { background: #0c1e35; border-color: #1a73e8; }
+    .log-telemetry { background: #0c2318; border-color: #16a34a; }
+    .log-type   { font-weight: 700; color: #93c5fd; margin-bottom: 2px; }
+    .log-telemetry .log-type { color: #86efac; }
+    .log-time   { color: #475569; font-size: 10px; }
+    .log-data   { color: #94a3b8; margin-top: 3px; white-space: pre-wrap; }
+
+    /* ── Responsive: collapse event panel on mobile ───────────────────────── */
+    @media (max-width: 640px) {
+      body {
+        grid-template-columns: 1fr;
+        grid-template-areas: "topbar" "player";
       }
-    </style>
+      .event-panel { display: none; }
+    }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-      crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect.min.js"
-      integrity="sha512-jvbPH2TH5BSZumEfOJZn9IV+5bSwwN+qG4dvthYe3KCGC3/9HmxZ4phADbt9Pfcp+XSyyfc2vGZ/RMsSUZ9tbQ=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    /* ── Theme override example (uncomment to test theming) ──────────────── */
+    /*
+    sunbird-pdf-player {
+      --pdf-primary:       #7c3aed;
+      --pdf-primary-hover: #6d28d9;
+      --pdf-header-bg:     #1e1b4b;
+      --pdf-header-text:   #e0e7ff;
+      --pdf-header-icon:   #a5b4fc;
+      --pdf-footer-bg:     #1e1b4b;
+      --pdf-footer-text:   #c7d2fe;
+    }
+    */
+  </style>
+</head>
 
-  </head>
+<body>
+  <!-- ── Top bar ──────────────────────────────────────────────────────────── -->
+  <div class="topbar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    <span class="title">Sunbird PDF Player</span>
 
-  <body>
-    <div class="player-grid" id="my-player">
+    <!-- PDF switcher -->
+    <div class="pdf-switcher">
+      <label for="pdf-select">PDF:</label>
+      <select id="pdf-select">
+        <option value="../src/assets/gita.pdf">Local — Gita (sample)</option>
+        <option value="https://www.w3.org/WAI/WCAG21/Techniques/pdf/sample.pdf">W3C sample PDF</option>
+        <option value="custom">Custom URL…</option>
+      </select>
+      <input id="custom-url" type="url" placeholder="https://…" style="display:none;width:220px;">
+      <button id="load-btn">Load</button>
     </div>
-    <script type="text/javascript" src="sunbird-pdf-player.js"></script>
-    <script type="text/javascript">
-      const playerConfig = {"context":{"mode":"play","partner":[],"pdata":{"id":"dev.sunbird.portal","ver":"5.2.0","pid":"sunbird-portal"},"contentId":"do_21374910251798528014586","sid":"6d1898db-d783-4f83-8b92-4a36636e0d2f","uid":"anonymous","timeDiff":-0.089,"channel":"01269878797503692810","tags":["01269878797503692810"],"did":"3ca74a4c5fbce6b7b7f5cd12cebb1682","contextRollup":{"l1":"01269878797503692810"},"objectRollup":{},"userData":{"firstName":"Guest","lastName":""}},"config":{"showEndPage":false,"endPage":[{"template":"assessment","contentType":["SelfAssess"]}],"showStartPage":true,"host":"","overlay":{"showUser":false},"splash":{"text":"","icon":"","bgImage":"assets/icons/splacebackground_1.png","webLink":""},"apislug":"/action","repos":["/sunbird-plugins/renderer"],"plugins":[{"id":"org.sunbird.iframeEvent","ver":1,"type":"plugin"},{"id":"org.sunbird.player.endpage","ver":1.1,"type":"plugin"}],"sideMenu":{"showShare":true,"showDownload":true,"showExit":false}},"metadata":{"copyright":"2009","subject":["Environmental Studies"],"channel":"01345815127107174426","language":["English"],"mimeType":"application/pdf","objectType":"Content","gradeLevel":["Class 3"],"appIcon":"","primaryCategory":"eTextbook","artifactUrl":"https://obj.stage.sunbirded.org/sunbird-content-staging/content/do_21374910251798528014586/artifact/cbse-sample-paper-for-class-1-.pdf","contentType":"eTextBook","identifier":"do_21374910251798528014586","audience":["Student"],"visibility":"Default","author":"Aparna-sri","mediaType":"content","osId":"org.ekstep.quiz.app","languageCode":["en"],"license":"CC BY 4.0","name":"pdf-pdf-pdf-pdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-pdfpdf-pdf-p","status":"Live","code":"0534f774-b873-d46d-a46b-bde6a68985dc","interceptionPoints":{},"streamingUrl":"https://obj.stage.sunbirded.org/sunbird-content-staging/content/do_21374910251798528014586/artifact/cbse-sample-paper-for-class-1-.pdf","medium":["English"],"createdOn":"2023-03-13T13:16:54.093+0000","lastUpdatedOn":"2023-03-13T13:17:03.060+0000","originData":{"identifier":"do_21374910251798528014586","repository":"https://dockstaging.sunbirded.org/api/content/v1/read/do_21374910251798528014586"},"creator":"Aparna-sri","pkgVersion":1,"versionKey":"1678713416428","framework":"ekstep_ncert_k-12","createdBy":"703f836a-353b-43f4-83fb-b440e7ee9302","orgDetails":{"email":null,"orgName":"Globe"},"licenseDetails":{"name":"CC BY 4.0","url":"https://creativecommons.org/licenses/by/4.0/legalcode","description":"For details see below:"}},"data":{}};
-      const pdfElement = document.createElement('sunbird-pdf-player');
-      pdfElement.setAttribute('player-config', JSON.stringify(playerConfig));
 
-      pdfElement.addEventListener('playerEvent', (event) => {
-        console.log("On playerEvent", event);
-      });
+    <span class="hint">Events visible in the right panel</span>
+  </div>
 
-      pdfElement.addEventListener('telemetryEvent', (event) => {
-        console.log("On telemetryEvent", event);
-      });
+  <!-- ── Player ───────────────────────────────────────────────────────────── -->
+  <div id="player-container">
+    <sunbird-pdf-player id="pdf-player"></sunbird-pdf-player>
+  </div>
 
-      const myPlayer = document.getElementById("my-player");
-      myPlayer.appendChild(pdfElement);
+  <!-- ── Event log panel ──────────────────────────────────────────────────── -->
+  <aside class="event-panel">
+    <div class="event-panel-header">
+      <span>Events</span>
+      <button id="clear-btn">Clear</button>
+    </div>
+    <div id="event-log"></div>
+  </aside>
 
-    </script>
-  </body>
+  <!--
+    Load the Lit web component bundle (ES module).
+    In a production portal, reference the versioned file from a CDN or your assets server.
+  -->
+  <script type="module" src="../dist/sunbird-pdf-player.js"></script>
 
+  <script>
+    // ── Helpers ─────────────────────────────────────────────────────────────
+    function buildConfig(artifactUrl) {
+      return {
+        context: {
+          mode: 'play',
+          sid: '7283cf2e-d215-9944-b0c5-269489c6fa56',
+          did: '3c0a3724311fe944dec5df559cc4e006',
+          uid: 'anonymous',
+          channel: '505c7c48ac6dc1edc9b08f21db5a571d',
+          pdata: { id: 'sunbird.portal', ver: '3.2.12', pid: 'sunbird-portal.contentplayer' },
+          contextRollup: { l1: '505c7c48ac6dc1edc9b08f21db5a571d' },
+          userData: { firstName: 'Guest', lastName: '' }
+        },
+        config: {
+          toolBar: {
+            showZoomButtons:   true,
+            showPagesButton:   true,
+            showPagingButtons: true,
+            showRotateButton:  true
+          },
+          sideMenu: {
+            showShare:    true,
+            showDownload: true,
+            showReplay:   true,
+            showExit:     false,
+            showPrint:    true
+          }
+        },
+        metadata: {
+          identifier: 'do_demo_001',
+          name: artifactUrl.includes('gita') ? 'Bhagavad Gita (sample)' : 'PDF Document',
+          artifactUrl
+        }
+      };
+    }
+
+    function logEvent(kind, detail) {
+      const log = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry log-${kind}`;
+
+      const time = new Date().toLocaleTimeString([], { hour12: false });
+      const type = detail.type || detail.eid || kind;
+      const dataStr = JSON.stringify(detail, null, 2);
+
+      entry.innerHTML = `
+        <div class="log-type">${type}</div>
+        <div class="log-time">${time}</div>
+        <div class="log-data">${dataStr.length > 400 ? dataStr.slice(0, 400) + '…' : dataStr}</div>
+      `;
+      log.prepend(entry);   // newest on top
+    }
+
+    function loadPlayer(url) {
+      const player = document.getElementById('pdf-player');
+      player.playerConfig = buildConfig(url);
+    }
+
+    // ── Bootstrap ────────────────────────────────────────────────────────────
+    const player  = document.getElementById('pdf-player');
+    const select  = document.getElementById('pdf-select');
+    const custom  = document.getElementById('custom-url');
+    const loadBtn = document.getElementById('load-btn');
+
+    // Show / hide the custom URL input
+    select.addEventListener('change', () => {
+      custom.style.display = select.value === 'custom' ? 'inline-block' : 'none';
+    });
+
+    // Load button
+    loadBtn.addEventListener('click', () => {
+      const url = select.value === 'custom' ? custom.value.trim() : select.value;
+      if (url) loadPlayer(url);
+    });
+
+    // Clear log
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      document.getElementById('event-log').innerHTML = '';
+    });
+
+    // ── Event listeners ───────────────────────────────────────────────────────
+    player.addEventListener('playerEvent', (e) => {
+      logEvent('player', e.detail);
+      console.log('%c[playerEvent]', 'color:#1a73e8;font-weight:bold', e.detail);
+    });
+
+    player.addEventListener('telemetryEvent', (e) => {
+      logEvent('telemetry', e.detail);
+      console.log('%c[telemetryEvent]', 'color:#16a34a;font-weight:bold', e.detail);
+    });
+
+    // ── Initial load ──────────────────────────────────────────────────────────
+    // Use the first option (local PDF) by default
+    loadPlayer(select.value);
+
+    // ── External action examples (uncomment to test) ──────────────────────────
+    // player.action = 'NEXT';
+    // player.action = 'ZOOM_IN';
+    // player.action = 'REPLAY';
+  </script>
+</body>
 </html>
