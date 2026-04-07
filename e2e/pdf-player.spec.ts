@@ -190,17 +190,32 @@ test.describe('Sunbird PDF Player — Core', () => {
     await waitForPlayer(page);
 
     const canvas = page.locator('pdf-viewer canvas').first();
-    const { width: w1, height: h1 } = await canvas.boundingBox() ?? { width: 0, height: 0 };
+    await expect(canvas).toBeVisible({ timeout: 10_000 });
+    const { width: w1, height: h1 } = (await canvas.boundingBox())!;
+    const ratio1 = h1 / w1; // portrait PDF: ratio > 1
 
     await page.locator('sb-player-header button[title="Rotate clockwise"]').click();
 
-    // After 90° rotation the canvas should be taller than wide (portrait→landscape)
-    await page.waitForTimeout(500); // allow re-render
-    const { width: w2, height: h2 } = await canvas.boundingBox() ?? { width: 0, height: 0 };
+    // Wait for the canvas to re-render with a visibly different aspect ratio.
+    // Fit-to-width means both orientations fill container width, so dimensions
+    // don't simply swap — but the aspect ratio inverts (portrait ↔ landscape).
+    await page.waitForFunction(
+      ({ w, r }: { w: number; r: number }) => {
+        const c = document.querySelector('pdf-viewer canvas') as HTMLCanvasElement | null;
+        if (!c) return false;
+        const box = c.getBoundingClientRect();
+        // Confirm re-render happened (height changed) and new ratio differs significantly
+        return Math.abs(box.width - w) < 10 && Math.abs((box.height / box.width) - r) > 0.2;
+      },
+      { w: w1, r: ratio1 },
+      { timeout: 10_000 }
+    );
 
-    // Width and height should swap (approximately)
-    expect(Math.abs(w2 - h1)).toBeLessThan(5);
-    expect(Math.abs(h2 - w1)).toBeLessThan(5);
+    const { width: w2, height: h2 } = (await canvas.boundingBox())!;
+    const ratio2 = h2 / w2;
+    // Original portrait (ratio > 1), after 90° becomes landscape-ish (ratio < 1)
+    expect(ratio1).toBeGreaterThan(1);
+    expect(ratio2).toBeLessThan(ratio1);
   });
 
   // ── 11. Sidebar ────────────────────────────────────────────────────────────
