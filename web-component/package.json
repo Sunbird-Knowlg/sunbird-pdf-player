@@ -1,6 +1,6 @@
 {
   "name": "@project-sunbird/sunbird-pdf-player-web-component",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The web component package for the sunbird pdf player",
   "main": "assets/pdf-player/sunbird-pdf-player.js",
   "scripts": {
