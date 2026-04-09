@@ -16,7 +16,7 @@ describe('SunbirdPdfPlayerComponent', () => {
       imports: [SunbirdPdfPlayerComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        ViewerService, 
+        ViewerService,
         SunbirdPdfPlayerService,
         { provide: PLAYER_CONFIG, useValue: { contentCompatibilityLevel: 5 } }
       ]
@@ -57,7 +57,7 @@ describe('SunbirdPdfPlayerComponent', () => {
     const renderer2Stub: Renderer2 = fixture.debugElement.injector.get(Renderer2);
     const viewerService = TestBed.inject(ViewerService);
     spyOn(viewerService, 'raiseExceptionLog').and.callThrough();
-    spyOn(component.errorService, 'checkContentCompatibility').and.returnValues({isCompitable: true, error: new Error ('error') });
+    spyOn(component.errorService, 'checkContentCompatibility').and.returnValues({ isCompitable: true, error: new Error('error') });
     component.playerConfig.metadata.compatibilityLevel = 4;
     spyOn(renderer2Stub, 'listen');
     component.ngAfterViewInit();
@@ -81,7 +81,7 @@ describe('SunbirdPdfPlayerComponent', () => {
     component.viewerService.currentPagePointer = 4;
     component.viewerService.totalNumberOfPages = 4;
     const viewerService = TestBed.inject(ViewerService);
-    spyOn(viewerService, 'raiseEndEvent').and.callFake(() => {});
+    spyOn(viewerService, 'raiseEndEvent').and.callFake(() => { });
     component.headerActions({ type: 'NEXT', data: '' });
     expect(viewerService.raiseEndEvent).toHaveBeenCalled();
   });
@@ -90,7 +90,7 @@ describe('SunbirdPdfPlayerComponent', () => {
     spyOn(component.viewerActions, 'emit');
     const viewerService = TestBed.inject(ViewerService);
     spyOn(viewerService, 'raiseHeartBeatEvent');
-    spyOn(viewerService, 'raiseEndEvent').and.callFake(() => {});
+    spyOn(viewerService, 'raiseEndEvent').and.callFake(() => { });
     viewerService.totalNumberOfPages = 1;
     component.headerActions({ type: 'NEXT', data: '' });
     expect(component.viewerActions.emit).toHaveBeenCalled();
@@ -233,7 +233,9 @@ describe('SunbirdPdfPlayerComponent', () => {
   });
   it('should call exitContent and emit raiseHeartBeatEvent event', () => {
     spyOn(component.viewerService, 'raiseHeartBeatEvent');
+    spyOn(component.viewerService, 'raiseEndEvent');
     component.exitContent({ type: 'error' });
+    expect(component.viewerService.raiseEndEvent).toHaveBeenCalled();
     expect(component.viewerService.raiseHeartBeatEvent).toHaveBeenCalledWith('error');
   });
   it('should call ngOnDestroy', () => {
@@ -256,7 +258,7 @@ describe('SunbirdPdfPlayerComponent', () => {
     spyOn(component.viewerActions, 'emit').and.callThrough();
     component.ngOnChanges(changes);
     expect(component.ngOnInit).toHaveBeenCalled();
-    expect(component.viewerActions.emit).toHaveBeenCalledWith({type: changes.action});
+    expect(component.viewerActions.emit).toHaveBeenCalledWith({ type: changes.action });
   });
   it('should call resetValidPage', () => {
     // eslint-disable-next-line @typescript-eslint/dot-notation
@@ -278,7 +280,7 @@ describe('SunbirdPdfPlayerComponent', () => {
 
   it('config and context should optional property for player and metadata should be mandatory field', () => {
     component.playerConfig = {
-      metadata: {identifier: 'do_testId', name: 'test_name', artifactUrl: 'testArtifact url'}
+      metadata: { identifier: 'do_testId', name: 'test_name', artifactUrl: 'testArtifact url' }
     };
     const sunbirdPdfPlayerService = TestBed.inject(SunbirdPdfPlayerService);
     const viewerService = TestBed.inject(ViewerService);
@@ -294,7 +296,7 @@ describe('SunbirdPdfPlayerComponent', () => {
 
   it('player config metadata should have the identifer, name, artifactUrl', () => {
     component.playerConfig = {
-      metadata: {identifier: 'do_testId', name: 'test_name', artifactUrl: 'testArtifact url'}
+      metadata: { identifier: 'do_testId', name: 'test_name', artifactUrl: 'testArtifact url' }
     };
     const sunbirdPdfPlayerService = TestBed.inject(SunbirdPdfPlayerService);
     const viewerService = TestBed.inject(ViewerService);
