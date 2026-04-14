@@ -14,10 +14,18 @@ import { SunbirdPdfPlayerService } from './sunbird-pdf-player.service';
 import * as _ from 'lodash';
 import { ErrorService, errorCode, errorMessage } from '@project-sunbird/sunbird-player-sdk-v9';
 
+import { CommonModule } from '@angular/common';
+import { SunbirdPlayerSdkModule } from '@project-sunbird/sunbird-player-sdk-v9';
+import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 @Component({
+  standalone: true,
   selector: 'sunbird-pdf-player',
   templateUrl: './sunbird-pdf-player.component.html',
-  styleUrls: ['./sunbird-pdf-player.component.scss']
+  styleUrls: ['./sunbird-pdf-player.component.scss'],
+  imports: [CommonModule, SunbirdPlayerSdkModule, PdfViewerComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SunbirdPdfPlayerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   public pdfConfig: Config;
@@ -143,6 +151,7 @@ export class SunbirdPdfPlayerComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   exitContent(event) {
+    this.viewerService.raiseEndEvent();
     this.viewerService.raiseHeartBeatEvent(event.type);
   }
 
@@ -244,8 +253,12 @@ export class SunbirdPdfPlayerComponent implements OnInit, OnDestroy, OnChanges, 
       this.subscription.unsubscribe();
     }
     this.viewerService.isEndEventRaised = false;
-    this.unlistenMouseEnter();
-    this.unlistenMouseLeave();
+    if (this.unlistenMouseEnter) {
+      this.unlistenMouseEnter();
+    }
+    if (this.unlistenMouseLeave) {
+      this.unlistenMouseLeave();
+    }
     // this.unlistenTouch();
   }
 }
